@@ -1,0 +1,7 @@
+/build
+/node_modules
+/out
+/include
+/target
+*.tsbuildinfo
+flamework.build
