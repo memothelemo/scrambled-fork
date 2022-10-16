@@ -13,13 +13,13 @@
 			}
 		},
     "ServerStorage": {
-        "$className": "ServerStorage",
-        "Game": {
-            "$className": "Folder",
-            "Dictionary": {
-                "$path": "build/dictionary/words.lua"
-            }
+      "$className": "ServerStorage",
+      "Game": {
+        "$className": "Folder",
+        "Dictionary": {
+            "$path": "build/dictionary/words.lua"
         }
+      }
     },
 		"ReplicatedStorage": {
 			"$className": "ReplicatedStorage",

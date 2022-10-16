@@ -1,9 +1,9 @@
 import { Controller, OnInit } from "@flamework/core";
-import { ResultSer } from "@memolemo-studios/result-option-ser";
 import { Logger } from "@rbxts/log";
 import { Result } from "@rbxts/rust-classes";
 import { Events, Functions } from "client/network";
 import { Store } from "client/store";
+import { ResultSerde } from "shared/serde/rust/Result";
 import { UserData } from "types/user";
 
 @Controller({})
@@ -17,7 +17,7 @@ export class DataController implements OnInit {
 	private async requestUserData(): Promise<Result<UserData, string>> {
 		const result = await Result.fromPromise(Functions.requestUserData());
 		return result.match(
-			(v) => ResultSer.deserialize(v),
+			(v) => ResultSerde.deserialize(v),
 			(v) => {
 				const err = v.map((v) => tostring(v)).unwrapOr("<unknown error>");
 				return Result.err<UserData, string>(err);

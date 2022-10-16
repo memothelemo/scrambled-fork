@@ -12,3 +12,6 @@
 *.rbxl.lock
 
 flamework.build
+
+# Logs
+*.log
