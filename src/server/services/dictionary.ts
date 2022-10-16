@@ -3,6 +3,7 @@ import { Logger } from "@rbxts/log";
 import { t } from "@rbxts/t";
 
 import { $instance } from "rbxts-transformer-fs";
+import { Functions } from "server/network";
 
 const dictionaryCheck = t.set(t.string);
 
@@ -41,5 +42,9 @@ export class DictionaryService implements OnInit {
 			this.logger.Warn("Cannot load file, loading an empty dictionary");
 			this.words = new Set();
 		}
+		Functions.isValidWord.setCallback((player, word) => {
+			this.logger.Debug("{@Player} requested isValidWord function; word = {Word}", player, word);
+			return this.isValidWord(word);
+		});
 	}
 }

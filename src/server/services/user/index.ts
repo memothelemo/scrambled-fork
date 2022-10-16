@@ -1,12 +1,14 @@
 import { OnInit, OnStart, Service } from "@flamework/core";
+import { ResultSer } from "@memolemo-studios/result-option-ser";
 import { Bin } from "@rbxts/bin";
 import { Logger } from "@rbxts/log";
 import { Option, Result } from "@rbxts/rust-classes";
 import { Players } from "@rbxts/services";
 import { User } from "server/entities/user";
+import { Functions } from "server/network";
 import { getSetOfListeners } from "shared/flamework/macros";
-import { toResult } from "shared/utils/promise";
 import { KickCodes as KickCodes } from "types/error";
+import { UserData } from "types/user";
 import { UserDataService } from "./data";
 import { UserKickService } from "./kick";
 
@@ -42,9 +44,9 @@ export class UserService implements OnInit, OnStart {
 		this.logger.Verbose("{@Player} joined the game; initializing as user...", player);
 
 		// Load player's data in the other hand
-		const result = (await toResult(this.userDataService.loadAsync(player))).match(
+		const result = (await Result.fromPromise(this.userDataService.loadAsync(player))).match(
 			(v) => v,
-			(v) => Result.err(v),
+			(v) => Result.err(v.map((v) => tostring(v)).unwrapOr("<unknown error>")),
 		);
 		if (result.isErr()) {
 			this.logger.Warn("Failed to load player's profile: {Source}", result.unwrapErr());
@@ -57,6 +59,7 @@ export class UserService implements OnInit, OnStart {
 		const profile = result.unwrap();
 		const bin = new Bin();
 		const user = new User(player, profile, bin);
+		this.userEntities.set(player.UserId, user);
 
 		bin.add(() => {
 			this.logger.Info("{@Player} left the game; releasing profile...", player);
@@ -80,7 +83,6 @@ export class UserService implements OnInit, OnStart {
 			() => {},
 		);
 	}
-
 	/**
 	 * Gets the User component for the player.
 	 */
@@ -88,9 +90,30 @@ export class UserService implements OnInit, OnStart {
 		return Option.wrap(this.userEntities.get(player.UserId));
 	}
 
+	/**
+	 * It wraps a callback and replaces the first argument with
+	 * player's User entity object
+	 */
+	withUserEntity<T extends unknown[], R = void>(fn: (user: User, ...args: T) => R) {
+		return (player: Player, ...args: T) =>
+			this.getUser(player).match(
+				(user) => fn(user, ...args),
+				() => {},
+			);
+	}
+
 	/** @hidden */
 	onInit() {
 		this.joinListeners = getSetOfListeners<OnUserJoin>();
+
+		Functions.requestUserData.setCallback((plr) =>
+			ResultSer.serialize<UserData, string>(
+				this.getUser(plr).match(
+					(v) => Result.ok(v.data),
+					() => Result.err("Cannot find user entity"),
+				),
+			),
+		);
 
 		Players.PlayerAdded.Connect((plr) => this.onPlayerAdded(plr));
 		Players.PlayerRemoving.Connect((plr) => this.onPlayerRemoving(plr));

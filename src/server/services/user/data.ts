@@ -57,8 +57,9 @@ export class UserDataService {
 		// TODO: Implement data migration module
 		profile.Reconcile();
 		profile.ListenToRelease(() => {
-			if (!player.IsDescendantOf(game)) return;
 			this.logger.Verbose("Profile released for {ProfileKey}", profileKey);
+			if (!player.IsDescendantOf(Players)) return;
+
 			this.userKickService.kickForBug(player, KickCodes.UserProfileReleased);
 		});
 

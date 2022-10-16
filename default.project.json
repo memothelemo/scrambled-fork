@@ -32,7 +32,10 @@
 					},
 					"@flamework": {
 						"$path": "node_modules/@flamework"
-					}
+					},
+          "@memolemo-studios": {
+            "$path": "node_modules/@memolemo-studios"
+          }
 				}
 			},
 			"TS": {
