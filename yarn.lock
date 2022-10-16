@@ -106,22 +106,49 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@rbxts/bin@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@rbxts/bin/-/bin-1.3.0.tgz#43a244da58910c335e77188fe54f57588ac1cc37"
+  integrity sha512-StlAhNCvwKnzKMOtq/YZaT/1CWlFxXtjmK8vBm2dRHgbvdjw39f5FEbuNFg9WEaOBiJztIcFvnTJd45YJxjL5g==
+
 "@rbxts/compiler-types@^2.0.2-types.0":
   version "2.0.2-types.0"
   resolved "https://registry.yarnpkg.com/@rbxts/compiler-types/-/compiler-types-2.0.2-types.0.tgz#3cce2f5074418747877b2353b95de182537a503d"
   integrity sha512-m947QoUoYnRIZygwaEzuBqJIYdOg0t1qCi1ZShXA5M9elUi4XrGebytuC1qGFoWHvtu4N7vqIrma5LzpaOT/Jw==
+
+"@rbxts/log@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@rbxts/log/-/log-0.6.3.tgz#65b51a897a2d646457db95b563ade3313e08d0be"
+  integrity sha512-YZpDvjL7yif9aYuNAkuM9vnegcwQmOwX0CfvGfWvrzCpmARY4Ey2pTMhoEgxKo36HcdPPi3aLxmcuvn0NHrPPg==
+  dependencies:
+    "@rbxts/message-templates" "^0.3.1"
 
 "@rbxts/maid@^1.0.0-ts.1":
   version "1.0.0-ts.1"
   resolved "https://registry.yarnpkg.com/@rbxts/maid/-/maid-1.0.0-ts.1.tgz#3db8687be6293cb66e8ba7f53994781e8ef679af"
   integrity sha512-nm4eucrDE5NnpkHJaaZvMwFJjk9YLAXrLYyA/MWXHI8vr7jeGHmex1N2b90ewa9KqeH+RiWlkXmj2xBALonC4Q==
 
+"@rbxts/message-templates@^0.3.1":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@rbxts/message-templates/-/message-templates-0.3.2.tgz#85169980cf73f659282aa9846290ceaf06967167"
+  integrity sha512-79onYskH3pgrBT73Zs+biQ31vAVvupKQaxGNWGjyGsxwNhO2YaN/qkut0bvOshaGa+ZzqAXApRVrN8ifIMPiMQ==
+
 "@rbxts/object-utils@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@rbxts/object-utils/-/object-utils-1.0.4.tgz#c53d80f89e75c401365446be63fa1396bc2cffe7"
   integrity sha512-dLLhf022ipV+9i910sOE7kl9losKHoon0WgeerHqVMQA5EYsLUsVT2AxhJuhk8MiDn5oJ2GiFofE/LadY9TpJQ==
 
-"@rbxts/services@^1.1.4", "@rbxts/services@^1.1.5":
+"@rbxts/profileservice@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@rbxts/profileservice/-/profileservice-1.4.1.tgz#892c41afa40b77677da9b9684cb18360a88c5073"
+  integrity sha512-cB9+hz7EOaqMKMDLrYE/aSzN2+hNlOBgmJTRdFwbZJ/EsJVqXVwaNx4REh+b6doqlnkPv6O2VIKP9LC2WypeYA==
+
+"@rbxts/rust-classes@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@rbxts/rust-classes/-/rust-classes-0.12.0.tgz#5d4be4003abd90aa62adbd2f0b2665009bd7df20"
+  integrity sha512-Ibk532/9tHswqU9AdJlLGDjb3fD+tisI0WzTvzsbFcndcdRfEmpBqXC0JZ+4+lIfSERJmL4zRXZQNN//nJ4rmw==
+
+"@rbxts/services@^1.1.4", "@rbxts/services@^1.1.5", "@rbxts/services@^1.5.1":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@rbxts/services/-/services-1.5.1.tgz#4536a87932f28797507ed591f0061277c52ea77f"
   integrity sha512-SRtfIjga0K4YYSXRpK+eH3kcTq7ZXo9OHOt0jszaOOoEOIJloMGlyuRPqesPHyhveh2AMXAZr3TYbRMSD+u+kQ==

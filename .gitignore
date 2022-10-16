@@ -1,7 +1,14 @@
+# Build artifacts
 /build
 /node_modules
 /out
 /include
 /target
+
+/game.rbxlx
+
 *.tsbuildinfo
+*.rbxlx.lock
+*.rbxl.lock
+
 flamework.build
