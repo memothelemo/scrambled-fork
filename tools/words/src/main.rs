@@ -10,16 +10,17 @@ use reqwest::header::{self, HeaderValue};
 mod console;
 mod constants;
 
-fn write_lua_file(mut writer: impl std::io::Write, entries: Vec<&str>) -> anyhow::Result<()> {
+fn write_lua_file(mut writer: impl std::io::Write, entries: &[&str]) -> anyhow::Result<()> {
+    writeln!(writer, "-- This is an auto-generated file. Please avoid editing this file or run `cargo run --bin words` to generate new set of words")?;
     writeln!(writer, "return {{")?;
-    for word in entries {
+    for word in entries.iter() {
         writeln!(writer, "\t[\"{}\"] = true,", word)?;
     }
     writeln!(writer, "}}")?;
     Ok(())
 }
 
-/// Criteria for valid scrabble word:
+/// Criteria for a valid scrabble word:
 ///
 /// - Must be more than 2 characters long and not more than 7 characters
 /// - Doesn't have any abbreviations, prefixes, numbers,
@@ -33,14 +34,21 @@ fn is_valid_scrabble_word(word: &str) -> bool {
 
 /// The main asynchronous thread
 async fn start() -> anyhow::Result<()> {
-    std::fs::create_dir_all("build/dictionary").ok();
+    std::fs::create_dir_all("generated/dictionary").ok();
 
     let file = OpenOptions::new()
         .write(true)
         .truncate(true)
         .create(true)
-        .open("build/dictionary/words.lua")
-        .with_context(|| "Failed to open build/dictionary/words.lua")?;
+        .open("generated/dictionary/words.lua")
+        .with_context(|| "Failed to open generated/dictionary/words.lua")?;
+
+    let json_file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open("generated/dictionary/words.json")
+        .with_context(|| "Failed to open generated/dictionary/words.json")?;
 
     println!("Fetching from {}", constants::SRC_LINK);
 
@@ -103,15 +111,16 @@ async fn start() -> anyhow::Result<()> {
     pb.set_style(console::SPINNER_STYLE_FINISHED.clone());
     pb.finish_with_message(format!("Done processing words ({:.2?})", elapsed));
     println!(
-        "There are {} valid Scrabble words, saving it as JSON",
+        "There are {} valid Scrabble words, saving it both Lua and JSON files",
         output.len()
     );
 
-    let now = Instant::now();
-    write_lua_file(file, output).with_context(|| "Failed to write build/dictionary/words.lua")?;
+    write_lua_file(file, &output)
+        .with_context(|| "Failed to write generated/dictionary/words.lua")?;
+    serde_json::to_writer(json_file, &output)
+        .with_context(|| "Failed to write generated/dictionary/words.json")?;
 
-    let elapsed = now.elapsed();
-    println!("Done writing file! ({:.2?})", elapsed);
+    println!("Done writing file!");
     Ok(())
 }
 

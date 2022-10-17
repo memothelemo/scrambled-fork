@@ -16,7 +16,7 @@ export class DictionaryService implements OnInit {
 		const now = os.clock();
 		let content;
 		try {
-			content = require($instance<ModuleScript>("build/dictionary/words.lua"));
+			content = require($instance<ModuleScript>("generated/dictionary/words.lua"));
 		} catch (err) {
 			this.logger.Warn("Failed to load file: {Source}", err);
 			return false;

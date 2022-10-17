@@ -1,5 +1,4 @@
 # Build artifacts
-/build
 /node_modules
 /out
 /include
@@ -15,3 +14,6 @@ flamework.build
 
 # Logs
 *.log
+
+# Hosted environment
+/.env
