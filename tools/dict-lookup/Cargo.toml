@@ -1,0 +1,13 @@
+[package]
+name = "dict-lookup"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4.2.1"
+anyhow = "1.0.65"
+serde = { version = "1.0.145", features = ["derive"] }
+serde_json = "1.0.86"
+tokio = { version = "1.21.2", features = ["rt", "sync", "time", "rt-multi-thread", "macros"] }
