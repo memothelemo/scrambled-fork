@@ -1,5 +1,6 @@
+import { Flamework, Modding, Reflect } from "@flamework/core";
 import { Networking } from "@flamework/networking";
-import Log from "@rbxts/log";
+import { Logger } from "@rbxts/log";
 import { Players } from "@rbxts/services";
 
 class RatelimitBucket {
@@ -24,10 +25,9 @@ class RatelimitBucket {
 		const now = os.clock();
 		const elapsed = now - this.lastResetTime;
 
-		// reset and then return true
+		// reset
 		if (elapsed >= this.resetInterval) {
 			this.reset();
-			return true;
 		}
 
 		if (this.budget === 0) return false;
@@ -50,6 +50,18 @@ interface RatelimitingOptions {
 	allowanceOnReset: number;
 }
 
+class Ratelimiter {}
+
+Reflect.defineMetadata(Ratelimiter, "identifier", Flamework.id<Ratelimiter>());
+Reflect.defineMetadata(Ratelimiter, "flamework:isArtificial", true);
+
+type FakeModding = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	resolveDependency: <T>(ctor: any, id: any, index: any, options: any) => T;
+};
+
+let logger: Logger = undefined as unknown as Logger;
+
 export function ratelimitingMiddleware<I extends unknown[], O>(
 	options: RatelimitingOptions,
 ): Networking.FunctionMiddleware<I, O> {
@@ -59,6 +71,13 @@ export function ratelimitingMiddleware<I extends unknown[], O>(
 	Players.PlayerRemoving.Connect((player) => bucketsPerPlayer.delete(player.UserId));
 
 	return (processNext, event) => {
+		// that's so unsafe right?
+		logger = (Modding as unknown as FakeModding).resolveDependency(
+			Ratelimiter,
+			Flamework.id<Logger>(),
+			0,
+			{},
+		) as Logger;
 		return async (player, ...args) => {
 			if (player) {
 				const playerUserId = player.UserId;
@@ -69,11 +88,11 @@ export function ratelimitingMiddleware<I extends unknown[], O>(
 				}
 				const ratelimited = !bucket.perform();
 				if (ratelimited) {
-					Log.Warn("[{Event}] {@Player} is being ratelimited!", event.name, player);
+					logger.Warn("[{Event}] {@Player} is being ratelimited!", event.name, player);
 					return Networking.Skip;
 				}
 			} else {
-				Log.Warn("[{Event}] Event requested with no player added", event.name);
+				logger.Warn("[{Event}] Event requested with no player", event.name);
 			}
 			return processNext(player, ...args);
 		};

@@ -35,5 +35,8 @@
 				"obfuscation": false
 			}
 		]
-	}
+	},
+  "exclude": [
+    "./tools"
+  ]
 }

@@ -38,7 +38,7 @@ export class DictionaryService implements OnInit {
 
 	onInit() {
 		if (!this.loadDictionaryFile()) {
-			this.logger.Warn("Cannot load file, loading an empty dictionary");
+			this.logger.Warn("Cannot load file, loading with an empty dictionary");
 			this.words = new Set();
 		}
 	}
